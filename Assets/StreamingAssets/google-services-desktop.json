@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "875632379597",
+    "firebase_url": "https://metajocley-default-rtdb.firebaseio.com",
+    "project_id": "metajocley",
+    "storage_bucket": "metajocley.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875632379597:android:e11b87adef5e36f7ef0b84",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.MetaJockey"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBA0JH2UaqpdW2Jmhyp-wNnAMCcxM_ZgZI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

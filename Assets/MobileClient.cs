@@ -14,10 +14,13 @@ public class MobileClient : MonoBehaviour
     public TMP_InputField passwordInput;
     public TMP_InputField messageInput;
     public TextMeshProUGUI statusText;
+    public GameObject loginPanel;  // 登入面板
+    public GameObject chatPanel;   // 聊天面板
 
     private FirebaseAuth auth;
     private DatabaseReference dbReference;
     private FirebaseUser currentUser;
+    long currentTime = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
     void Start()
     {
@@ -73,12 +76,15 @@ public class MobileClient : MonoBehaviour
             AuthResult result = task.Result;
             currentUser = result.User;
             statusText.text = $"登入成功！歡迎：{currentUser.Email}";
+            loginPanel.SetActive(false); // 隱藏登入面板
+            chatPanel.SetActive(true);   // 顯示聊天面板
         });
     }
 
     // 傳送訊息綁定到按鈕
     public void SendMessage()
     {
+        currentTime = System.DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         // 1. 檢查 UI 元件是否有綁定 (防止 Inspector 忘記拖曳)
         if (messageInput == null || statusText == null)
         {
@@ -105,7 +111,7 @@ public class MobileClient : MonoBehaviour
         if (string.IsNullOrEmpty(msg)) return;
 
         // 建立訊息資料結構
-        MessageData newMsg = new MessageData(currentUser.Email, msg);
+        MessageData newMsg = new MessageData(currentUser.Email, msg, currentTime);
         string json = JsonUtility.ToJson(newMsg);
 
         // 傳送至資料庫
@@ -119,8 +125,15 @@ public class MobileClient : MonoBehaviour
             {
                 statusText.text = "訊息傳送成功！";
                 messageInput.text = ""; // 清空輸入框
+                Debug.Log(newMsg.timestamp);
             }
         });
+    }
+    public void sendEffect()
+    {
+        // 這裡可以放一些特效的程式碼，例如播放動畫、音效等
+        messageInput.text = "%1"; // 清空輸入框
+        SendMessage();
     }
 
 }
@@ -131,10 +144,14 @@ public class MessageData
 {
     public string senderEmail;
     public string content;
+    public long timestamp; // 新增這行來記錄時間
 
-    public MessageData(string email, string msg)
+    public MessageData() {}
+
+    public MessageData(string email, string msg, long time)
     {
         this.senderEmail = email;
         this.content = msg;
+        this.timestamp = time;
     }
 }
